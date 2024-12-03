@@ -1,38 +1,34 @@
 from selenium.webdriver.common.by import By
 
-class Locators:
-    # Заголовок страницы
-    PAGE_TITLE = (By.TAG_NAME, 'h1')
+class ManePageLocators:
 
-    # Линк на конструктор
-    CONSTRUCTOR_LINK = (By.XPATH, "//p[contains(text(),'Конструктор')]")
 
-    # Линк на ленту заказов
-    FEED_LINK = (By.XPATH, "//p[contains(text(),'Лента Заказов')]")
+    LOGIN_BUTTON=(By.XPATH,".//button[text()='Войти в аккаунт']")
+    TITLE_TEXT=(By.XPATH,".//h1[text()='Соберите бургер']")
+    CREATE_ORDER_BUTTON = By.XPATH, '//button[text()="Оформить заказ"]'
+    BUN_INGREDIENT = (By.XPATH, '//p[text()="Флюоресцентная булка R2-D3"]')
 
-    # Линк на личный кабинет
-    ACCOUNT_LINK = (By.XPATH, "//p[contains(text(),'Личный Кабинет')]")
+    SAUSE_BUTTON = (By.XPATH, ".//span[text()='Соусы']/parent::*")
+    BAN_BUTTON = (By.XPATH, ".//span[text()='Булки']/parent::*")
+    FILLING_BUTTON = (By.XPATH, ".//span[text()='Начинки']/parent::*")
 
-    # Раздел ингредиентов
-    INGREDIENTS_SECTION = (By.CLASS_NAME, "BurgerIngredients_ingredients__1N8v2")
+    H_SAUSE = (By.XPATH, ".//h2[contains(@class,'text text_type_main') and text()='Соусы']")
+    H_BAN = (By.XPATH, ".//h2[contains(@class,'text text_type_main') and text()='Булки']")
+    H_FILLING = (By.XPATH, ".//h2[contains(@class,'text text_type_main') and text()='Начинки']")
 
-    # Заголовок для "Соберите бургер"
-    BURGER_HEADER = (By.XPATH, "//h1[contains(text(),'Соберите бургер')]")
+    INGREDIENT_FILLING_BEEF=(By.XPATH,".//img[text()='Говяжий метеорит (отбивная)']")
+    INGREDIENT_BUN = (By.XPATH, '//p[text()="Флюоресцентная булка R2-D3"]')
+    INGREDIENT_DETAILS = (By.XPATH, '//h2[text()="Детали ингредиента"]')
+    CROSS_BUTTON = By.XPATH, '//button[contains(@class,"close")]'
 
-    # Таб для булок
-    BUN_TAB = (By.XPATH, "//span[text()='Булки']")
+    INGREDIENT_COUNTER = (By.XPATH, '//ul[1]/a[1]//p[contains(@class, "num")]')
 
-    # Таб для соусов
-    SAUCE_TAB = (By.XPATH, "//span[text()='Соусы']")
 
-    # Таб для начинок
-    FILLING_TAB = (By.XPATH, "//span[text()='Начинки']")
+    BURGER_CONSTRUCTOR_BASKET = (By.XPATH, "//span[@class='constructor-element__text' and text()='Перетяните булочку сюда (низ)']")
+    ORDER_IDENTIFICATE = (By.XPATH, '//p[text()="идентификатор заказа"]')
+    ORDER_ID = (By.CLASS_NAME, "Modal_modal__title_shadow__3ikwq")
+    INGREDIENT_DETAILS_IN_POPUP = (By.XPATH, '//h2[text()="Детали ингредиента"]')
+    CLOSE_MODAL_ORDER = (By.XPATH, "//button[contains(@class, 'Modal_modal__close')][1]")
 
-    # Ингредиенты (пример для первого ингредиента)
-    FIRST_INGREDIENT = (By.XPATH, "(//a[contains(@class, 'BurgerIngredient_ingredient__1TVf6')])[1]")
 
-    # Кнопка "Войти в аккаунт"
-    LOGIN_BUTTON = (By.XPATH, "//button[contains(text(), 'Войти в аккаунт')]")
 
-    # Сообщение об успешном заказе
-    SUCCESS_MESSAGE = (By.XPATH, "//h2[@class='Modal_modal__title_shadow__3ikwq' and text()='9999']")

@@ -1,0 +1,159 @@
+import allure
+from selenium.common import TimeoutException
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+import data.data as data
+import locators.base_page_locators as BP_locators
+
+
+class BasePage:
+    def __init__(self, driver):
+        self.driver = driver
+
+    @allure.title("Открытие веб-страницы")
+    @allure.description("Открывает веб-страницу в браузере")
+    def open_web_page(self, url):
+        return self.driver.get(url)
+
+    @allure.title("Получение текущего URL")
+    @allure.description("Возвращает текущий URL страницы")
+    def get_curent_url(self):
+        return self.driver.current_url
+
+    @allure.title("Наведение курсора на элемент")
+    @allure.description("Наводит курсор на указанный элемент на странице")
+    def move_to_element(self, element):
+        target_element = self.driver.find_element(*element)
+        ActionChains(self.driver).move_to_element(target_element).perform()
+
+    @allure.title("Ожидание видимости элемента")
+    @allure.description("Ожидает, пока указанный элемент станет видимым на странице")
+    def wait_until_element_is_visible(self, element):
+        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(element))
+
+    @allure.title("Ожидание видимости элемента и возвращение элемента")
+    @allure.description("Ожидает, пока указанный элемент станет видимым на странице и возвращает его")
+    def wait_until_element_is_visible_return(self, element):
+        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(element))
+        return self.driver.find_element(*element)
+
+    @allure.title("Проверка невидимости элемента")
+    @allure.description("Проверяет, что указанный элемент невидим на странице в течение заданного времени")
+    def check_invisibility_of_element(self, element, timeout=10, poll_frequency=0.5):
+        try:
+            WebDriverWait(self.driver, timeout, poll_frequency).until(
+                expected_conditions.invisibility_of_element(element)
+            )
+            return True
+        except TimeoutException:
+            return False
+
+    @allure.title("Ожидание кликабельности элемента")
+    @allure.description("Ожидает, пока указанный элемент станет кликабельным")
+    def wait_until_element_is_clickable(self, element):
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(element))
+
+    @allure.title("Клик на элемент")
+    @allure.description("Кликает на указанный элемент на странице")
+    def click_element(self, element):
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(element))
+        if data.DRIVER_TYPE == "chrome":
+            self.driver.find_element(*element).click()
+        elif data.DRIVER_TYPE == "firefox":
+            WebDriverWait(self.driver, 10).until_not(
+                expected_conditions.visibility_of_any_elements_located(BP_locators.BasePageLocators.MODAL_WINDOW))
+            self.driver.find_element(*element).click()
+
+    @allure.title("Получение текста элемента")
+    @allure.description("Возвращает текст указанного элемента")
+    def get_text_of_element(self, element):
+        text = self.driver.find_element(*element).text
+        return text
+
+    @allure.title("Ввод данных в поле")
+    @allure.description("Вводит указанные данные в указанное поле на странице")
+    def input_data_to_field(self, element, data):
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(element))
+        self.driver.find_element(*element).send_keys(data)
+
+    @allure.title("Перетаскивание элемента на другой элемент")
+    @allure.description("Перетаскивает указанный элемент на другой указанный элемент")
+    def drag_and_drop_on_element(self, source_locator, target_locator):
+        source_element = self.driver.find_element(*source_locator)
+        target_element = self.driver.find_element(*target_locator)
+        if data.DRIVER_TYPE == "chrome":
+            actions = ActionChains(self.driver)
+            actions.drag_and_drop(source_element, target_element).perform()
+        elif data.DRIVER_TYPE == "firefox":
+            source = source_element
+            target = target_element
+            WebDriverWait(self.driver, 15).until_not(
+                expected_conditions.visibility_of_any_elements_located(BP_locators.BasePageLocators.MODAL_WINDOW))
+            self.driver.execute_script("""
+                               var source = arguments[0];
+                               var target = arguments[1];
+                               var evt = document.createEvent("DragEvent");
+                               evt.initMouseEvent("dragstart", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                               source.dispatchEvent(evt);
+
+                               evt = document.createEvent("DragEvent");
+                               evt.initMouseEvent("dragenter", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                               target.dispatchEvent(evt);
+
+                               evt = document.createEvent("DragEvent");
+                               evt.initMouseEvent("dragover", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                               target.dispatchEvent(evt);
+
+                               evt = document.createEvent("DragEvent");
+                               evt.initMouseEvent("drop", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                               target.dispatchEvent(evt);
+
+                               evt = document.createEvent("DragEvent");
+                               evt.initMouseEvent("dragend", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                               source.dispatchEvent(evt);
+                           """, source, target)
+
+
+    '''
+    @allure.title("Авторизация пользователя")
+    @allure.description("Авторизует пользователя на платформе с указанными логином и паролем")
+    def login_user(self, user_email, user_password):
+        self.driver.get(f"{Urls.LOGIN_PAGE_URL}")
+        self.wait_until_element_is_visible(LP_locators.TEXT_ENTER)
+        self.input_data_to_field(LP_locators.EMAIL_FIELD, user_email)
+        self.input_data_to_field(LP_locators.PASSWORD_FIELD, user_password)
+        self.click_element(LP_locators.LOGIN_BUTTON)
+        '''
+
+
+
+    @allure.title("Поиск всех элементов")
+    @allure.description("Эта функция ищет и возвращает все элементы, соответствующие параметрам.")
+    def find_all_elements(self, element):
+        return WebDriverWait(self.driver, 15).until(expected_conditions.presence_of_all_elements_located(element))
+
+    @allure.title("Перемещение и клик по элементу")
+    @allure.description("Эта функция перемещает указатель мыши на элемент и кликает по нему.")
+    def move_click_element(self, element):
+        currency_element = self.driver.find_element(*element)
+        actions = ActionChains(self.driver)
+        actions.move_to_element(currency_element).click().perform()
+
+    @allure.title("Поиск элементов с ожиданием")
+    @allure.description("Эта функция ожидает видимости элементов и возвращает список найденных элементов.")
+    def find_elements_with_wait(self, element):
+        if data.DRIVER_TYPE == "firefox":
+            WebDriverWait(self.driver, 15).until_not(
+                expected_conditions.visibility_of_any_elements_located(BP_locators.BasePageLocators.MODAL_WINDOW))
+        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(element))
+        return self.driver.find_elements(*element)
+
+    @allure.title("Поиск элемента с ожиданием")
+    @allure.description("Эта функция ожидает видимости элемента и возвращает его.")
+    def find_element_with_wait(self, element):
+        if data.DRIVER_TYPE == "firefox":
+            WebDriverWait(self.driver, 15).until_not(
+                expected_conditions.visibility_of_any_elements_located(BP_locators.BasePageLocators.MODAL_WINDOW))
+        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(element))
+        return self.driver.find_element(*element)

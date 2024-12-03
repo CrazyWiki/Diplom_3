@@ -1,0 +1,4 @@
+DRIVER_TYPE=None
+ORDER_ID_BY_DEFAULT=('9999')
+TEST_EMAIL="testBA@mail.com"
+TEST_PASSWORD="fizmat"
