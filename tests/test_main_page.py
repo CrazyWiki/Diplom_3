@@ -1,4 +1,3 @@
-
 import allure
 
 import data.data

@@ -4,10 +4,7 @@ import pytest
 from pages.order_page import OrderPage
 from data.urls import Urls
 from locators.order_page_locators import OrderPageLocators as OP_locators
-from conftest import driver, create_user, delete_user, login_user
 
-
-#from conftest import driver, create_user, delete_user, login_user
 
 class TestOrderPage:
 

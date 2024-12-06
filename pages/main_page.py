@@ -3,7 +3,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.base_page import BasePage
 from locators.main_page_locators import ManePageLocators as MP_locators
-from locators.base_page_locators import BasePageLocators as BP_locators
+
 import data.data as data
 
 
