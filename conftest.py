@@ -2,18 +2,16 @@ import pytest
 from selenium import webdriver
 import requests
 import allure
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
 
 import data.data
 from faker import Faker
 from data.urls import Urls
-from locators.login_page_locators import LoginPageLocators as LP_locators
-from locators.base_page_locators import BasePageLocators as BP_locators
+from pages.login_page import LoginPage
+from pages.main_page import MainPage
 
 
 @pytest.fixture(params=['chrome', 'firefox'])
-def driver(request):
+def driver(request): #request позволяет получить текущее значение параметра в фикстуре
     if request.param == 'chrome':
         data.data.DRIVER_TYPE="chrome"
         driver_instance = webdriver.Chrome()
@@ -45,17 +43,15 @@ def delete_user(create_user):
 
 @pytest.fixture
 def login_user(driver, create_user):
+    login_page = LoginPage(driver)
+    main_page = MainPage(driver)
+
     driver.get(f"{Urls.LOGIN_PAGE_URL}")
-    WebDriverWait(driver, 10).until(expected_conditions.element_to_be_clickable(LP_locators.EMAIL_FIELD))
-    driver.find_element(*LP_locators.EMAIL_FIELD).send_keys(create_user[0])
-    driver.find_element(*LP_locators.PASSWORD_FIELD).send_keys(create_user[1])
-    WebDriverWait(driver, 10).until(expected_conditions.element_to_be_clickable(LP_locators.LOGIN_BUTTON))
-    if data.data.DRIVER_TYPE == "chrome":
-        driver.find_element(*LP_locators.LOGIN_BUTTON).click()
-    elif data.data.DRIVER_TYPE == "firefox":
-        WebDriverWait(driver, 10).until_not(
-            expected_conditions.visibility_of_any_elements_located(BP_locators.MODAL_WINDOW))
-        driver.find_element(*LP_locators.LOGIN_BUTTON).click()
+    login_page.enter_email(create_user[0])
+    login_page.enter_password(create_user[1])
+    login_page.click_login_button()
+
+    assert main_page.is_create_order_button_visible()
 
 
 

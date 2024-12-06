@@ -2,15 +2,15 @@ import allure
 
 from pages.password_recovery_page import PasswordRecoveryPage
 from data.urls import Urls
-from locators.password_recovery_locators import PasswordRecoveryLocators as PRP_locators
+
+
 class TestPasswordRecovery:
     @allure.title("Навигация на страницу восстановления пароля")
     @allure.description(
         "Открывает страницу входа, затем переходит на страницу восстановления пароля и проверяет текущий URL.")
     def test_password_recovery_page_navigation(self, driver):
-        password_recovery_page  = PasswordRecoveryPage(driver)
+        password_recovery_page = PasswordRecoveryPage(driver)
         password_recovery_page.open_web_page(Urls.LOGIN_PAGE_URL)
-        password_recovery_page.wait_until_element_is_clickable(PRP_locators.LINK_RECOVERY_PASSWORD)
         current_url = password_recovery_page.password_recovery_page_navigation()
         assert current_url == (f"{Urls.RESTORE_PASSWORD_PAGE_URL}")
 

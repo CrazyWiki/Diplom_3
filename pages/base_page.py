@@ -144,3 +144,18 @@ class BasePage:
                 expected_conditions.visibility_of_any_elements_located(BP_locators.BasePageLocators.MODAL_WINDOW))
         WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(element))
         return self.driver.find_element(*element)
+
+    def click_constructor_link_and_wait(self):
+        self.click_element(BP_locators.BasePageLocators.CONSTRUCTOR_LINK)
+        self.wait_until_element_is_clickable(BP_locators.BasePageLocators.CONSTRUCTOR_LINK)
+
+    def click_order_feed_and_wait(self):
+        self.click_element(BP_locators.BasePageLocators.ORDER_FEED_LINK)
+        self.wait_until_element_is_clickable(BP_locators.BasePageLocators.ORDER_FEED_LINK)
+
+    def wait_for_digit_to_be_non_zero(self,element):
+        WebDriverWait(self.driver, 10).until(lambda driver: self._text_is_non_zero(element))
+
+    def _text_is_non_zero(self, element):
+        text_value = self.get_text_of_element(element)
+        return text_value != "0"

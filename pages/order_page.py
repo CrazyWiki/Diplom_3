@@ -5,7 +5,6 @@ from pages.base_page import BasePage
 from locators.order_page_locators import OrderPageLocators as OP_locators
 from locators.base_page_locators import BasePageLocators as BP_locators
 from locators.main_page_locators import ManePageLocators as MP_locators
-import time
 import data.data as data
 
 
@@ -40,6 +39,7 @@ class OrderPage(BasePage):
     def add_filling_to_order(self):
         self.wait_until_element_is_clickable(MP_locators.BUN_INGREDIENT)
         self.drag_and_drop_on_element(MP_locators.BUN_INGREDIENT, MP_locators.BURGER_CONSTRUCTOR_BASKET)
+        self.wait_for_digit_to_be_non_zero(MP_locators.DIGIT_ADDING_FILLING)
 
 
     @allure.step("Возвращает идентификатор созданного заказа")
@@ -53,8 +53,8 @@ class OrderPage(BasePage):
 
     @allure.step("Создает новый заказ, добавляя начинку и нажимая на кнопку создания заказа.")
     def make_order(self):
+        self.wait_until_element_is_visible(MP_locators.CREATE_ORDER_BUTTON)
         self.add_filling_to_order()
-        time.sleep(2)
         self.click_element(MP_locators.CREATE_ORDER_BUTTON)
         order_number = self.get_order_id()
         id = self.get_order_of_user(order_number)
@@ -64,10 +64,8 @@ class OrderPage(BasePage):
 
     @allure.step("Проверяет, присутствует ли заказ с определенным идентификатором в ленте.")
     def get_order_id_in_feed(self, order_id):
-        # self.click_close_modal_order()
-        time.sleep(2)
         self.click_element(BP_locators.ORDER_FEED_LINK)
-        time.sleep(2)
+        self.wait_until_element_is_visible(OP_locators.ORDERS_LIST_NUMBER)
         all_elements_feed_order = self.driver.find_elements(*OP_locators.ORDERS_LIST_NUMBER)
         all_elements_feed_order_text = [element.text for element in all_elements_feed_order if
                                          element.text.startswith("#")]
@@ -82,4 +80,15 @@ class OrderPage(BasePage):
         counter=self.find_element_with_wait(counter_locator).text
         return int(counter)
 
+    @allure.step("Ожидание видимости количества активных заказов")
+    def wait_for_active_orders_count(self):
+        self.wait_until_element_is_visible(OP_locators.ACTIVE_ORDERS_COUNT)
+
+    @allure.step("Получение количества активных заказов")
+    def get_active_orders_count(self):
+        return f"#{self.get_text_of_element(OP_locators.ACTIVE_ORDERS_COUNT)}"
+
+    @allure.step("Получение количества завершенных заказов")
+    def get_complete_orders_count(self):
+        return f"#{self.get_text_of_element(OP_locators.ACTIVE_ORDERS_COUNT_2)}"
 

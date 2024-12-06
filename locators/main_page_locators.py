@@ -20,6 +20,7 @@ class ManePageLocators:
     INGREDIENT_BUN = (By.XPATH, '//p[text()="Флюоресцентная булка R2-D3"]')
     INGREDIENT_DETAILS = (By.XPATH, '//h2[text()="Детали ингредиента"]')
     CROSS_BUTTON = By.XPATH, '//button[contains(@class,"close")]'
+    DIGIT_ADDING_FILLING=(By.XPATH, "//p[contains(@class, 'text_type_digits-medium')]")
 
     INGREDIENT_COUNTER = (By.XPATH, '//ul[1]/a[1]//p[contains(@class, "num")]')
 

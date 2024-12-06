@@ -1,6 +1,9 @@
 import allure
+from selenium.webdriver.support.wait import WebDriverWait
+
 from pages.base_page import BasePage
 from locators.main_page_locators import ManePageLocators as MP_locators
+from locators.base_page_locators import BasePageLocators as BP_locators
 import data.data as data
 
 
@@ -23,7 +26,7 @@ class MainPage(BasePage):
         return text
 
     @allure.step("Закрытие всплывающего окна")
-    def close_popup_window(self): # туту поменять
+    def close_popup_window(self):
         self.driver.find_element(*MP_locators.CROSS_BUTTON).click()
 
     @allure.step("Добавление начинки в заказ")
@@ -44,6 +47,13 @@ class MainPage(BasePage):
             id = self.get_text_of_element(MP_locators.ORDER_ID)
         return id
 
+    @allure.step("Проверяет, что указанный элемент невидим на странице в течение заданного времени")
+    def check_invisibility_of_element_MP_ingredients_details(self):
+        return self.check_invisibility_of_element(element=MP_locators.INGREDIENT_DETAILS_IN_POPUP)
+
+    @allure.step("Проверка видимости кнопки создания заказа")
+    def is_create_order_button_visible(self):
+        return self.wait_until_element_is_visible_return(MP_locators.CREATE_ORDER_BUTTON)
 
 
 

@@ -8,3 +8,4 @@ class PasswordRecoveryLocators:
     RECOVERY_PASSWORD_LABEL = (By.XPATH, ".//h2[text()='Восстановление пароля']")
     INPUT_ICON = (By.CLASS_NAME, "input__icon")
     INPUT_PASSWORD_STATUS = (By.CLASS_NAME, "input_status_active")
+    BUTTON_SAVE_NEW_PASSWORD=(By.XPATH, "//button[text()='Сохранить']")
