@@ -56,6 +56,6 @@ def login_user(driver, create_user):
         WebDriverWait(driver, 10).until_not(
             expected_conditions.visibility_of_any_elements_located(BP_locators.MODAL_WINDOW))
         driver.find_element(*LP_locators.LOGIN_BUTTON).click()
-    return driver
+
 
 
