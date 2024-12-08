@@ -1,6 +1,4 @@
 import allure
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
 from pages.base_page import BasePage
 from locators.order_page_locators import OrderPageLocators as OP_locators
 from locators.base_page_locators import BasePageLocators as BP_locators
@@ -16,14 +14,13 @@ class OrderPage(BasePage):
 
     @allure.step("Проверка деталей заказа")
     def check_order_details(self):
-        WebDriverWait(self.driver, 10).until(
-            expected_conditions.presence_of_element_located(OP_locators.ORDER_COMPOSITION))
-        details = self.driver.find_element(*OP_locators.ORDER_COMPOSITION)
+        self.wait_until_element_is_visible(OP_locators.ORDER_COMPOSITION)
+        details=self.find_element(OP_locators.ORDER_COMPOSITION)
         return details.is_displayed()
 
     @allure.step("Проверка идентификатора заказа")
     def check_order_id(self, id, element):
-        all_elements = self.driver.find_all_elements(element)
+        all_elements=self.find_all_elements(element=element)
         for each_element in all_elements:
             if id == each_element.text:
                 return True
@@ -66,7 +63,7 @@ class OrderPage(BasePage):
     def get_order_id_in_feed(self, order_id):
         self.click_element(BP_locators.ORDER_FEED_LINK)
         self.wait_until_element_is_visible(OP_locators.ORDERS_LIST_NUMBER)
-        all_elements_feed_order = self.driver.find_elements(*OP_locators.ORDERS_LIST_NUMBER)
+        all_elements_feed_order=self.find_all_elements(OP_locators.ORDERS_LIST_NUMBER)
         all_elements_feed_order_text = [element.text for element in all_elements_feed_order if
                                          element.text.startswith("#")]
         if order_id in all_elements_feed_order_text:

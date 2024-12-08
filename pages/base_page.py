@@ -27,6 +27,11 @@ class BasePage:
         target_element = self.driver.find_element(*element)
         ActionChains(self.driver).move_to_element(target_element).perform()
 
+    @allure.step("Ищет элемент на странице по указанному локатору")
+    def find_element(self, element):
+        # Ждем, пока элемент станет доступен, затем его возвращаем
+        return WebDriverWait(self.driver, 10).until(expected_conditions.presence_of_element_located(element))
+
 
     @allure.step("Ожидает, пока указанный элемент станет видимым на странице")
     def wait_until_element_is_visible(self, element):
@@ -35,8 +40,8 @@ class BasePage:
 
     @allure.step("Ожидает, пока указанный элемент станет видимым на странице и возвращает его")
     def wait_until_element_is_visible_return(self, element):
-        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(element))
-        return self.driver.find_element(*element)
+        self.wait_until_element_is_visible(element)
+        return self.find_element(element)
 
 
     @allure.step("Проверяет, что указанный элемент невидим на странице в течение заданного времени")

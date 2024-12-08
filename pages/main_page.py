@@ -1,5 +1,4 @@
 import allure
-from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.base_page import BasePage
 from locators.main_page_locators import ManePageLocators as MP_locators
@@ -27,7 +26,7 @@ class MainPage(BasePage):
 
     @allure.step("Закрытие всплывающего окна")
     def close_popup_window(self):
-        self.driver.find_element(*MP_locators.CROSS_BUTTON).click()
+        self.find_element(MP_locators.CROSS_BUTTON).click()
 
     @allure.step("Добавление начинки в заказ")
     def add_filling_to_order(self):

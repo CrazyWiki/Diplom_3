@@ -4,6 +4,7 @@ from pages.password_recovery_page import PasswordRecoveryPage
 from data.urls import Urls
 
 
+
 class TestPasswordRecovery:
     @allure.title("Навигация на страницу восстановления пароля")
     @allure.description(
@@ -12,16 +13,16 @@ class TestPasswordRecovery:
         password_recovery_page = PasswordRecoveryPage(driver)
         password_recovery_page.open_web_page(Urls.LOGIN_PAGE_URL)
         current_url = password_recovery_page.password_recovery_page_navigation()
-        assert current_url == (f"{Urls.RESTORE_PASSWORD_PAGE_URL}")
+        assert current_url == (Urls.RESTORE_PASSWORD_PAGE_URL)
 
     @allure.title("Ввод email и отправка запроса на восстановление пароля")
     @allure.description(
         "Открывает страницу сброса пароля, вводит email и отправляет запрос, затем проверяет текущий URL.")
     def test_email_input_and_submit(self,driver):
         password_recovery_page = PasswordRecoveryPage(driver)
-        password_recovery_page.open_web_page(f"{Urls.RESET_PASSWORD_PAGE_URL}")
+        password_recovery_page.open_web_page(Urls.RESET_PASSWORD_PAGE_URL)
         current_url = password_recovery_page.password_recovery_email_input_and_submit()
-        assert current_url == (f"{Urls.RESET_PASSWORD_PAGE_URL}")
+        assert current_url == (Urls.RESET_PASSWORD_PAGE_URL)
 
     @allure.title("Показать/скрыть поле пароля")
     @allure.description(

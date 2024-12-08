@@ -5,7 +5,6 @@ from pages.order_page import OrderPage
 from data.urls import Urls
 from locators.order_page_locators import OrderPageLocators as OP_locators
 
-
 class TestOrderPage:
 
     @allure.title("Клик по заказу открывает всплывающее окно с деталями")
